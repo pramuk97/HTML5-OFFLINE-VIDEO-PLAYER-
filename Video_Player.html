@@ -96,6 +96,9 @@
 			color: white;
 			background-color: rgba(0, 0, 0, 0.7);
 			list-style: none;
+			max-height:500px;
+			max-width:500px;
+			overflow:scroll;
 		}
 
 		li {
@@ -106,13 +109,16 @@
 		li.played {
 			text-decoration: line-through;
 			list-style: square;
+			font-weight:bold;
 		}
 	</style>
-
+	<label class="nm">
+	
+	</label>
 	<video controls autoplay></video>
 	<input type="file" multiple>
 	<a class='fadeout' href="#">Open Files</a>
-	<input class='fadeout' type="text" placeholder="playback speed" value="1.5">
+	<input class='fadeout' type="text" placeholder="playback speed" value="2">
 	<ul></ul>
 
 	<script>
@@ -131,6 +137,14 @@
 		});
 		function nextVideo() {
 			t++;
+			video.src = playlist.childNodes[t].objUrl;
+			playlist.childNodes[t].classList.add('played');
+			video.playbackRate = Number(speedInput.value);
+			video.addEventListener("ended", nextVideo, false);
+
+		}
+		function previousVideo() {
+			t--;
 			video.src = playlist.childNodes[t].objUrl;
 			playlist.childNodes[t].classList.add('played');
 			video.playbackRate = Number(speedInput.value);
@@ -184,7 +198,7 @@
 		});
 		// add keyboard shortcuts for pause (space) and 5 sec jump (left/right arrow)
 		document.addEventListener('keydown', e => {
-			// console.log(e.keyCode);
+			 //console.log(e.keyCode);
 			switch (e.keyCode) {
 				case 32: // space
 					video.paused ? video.play() : video.pause();
@@ -195,6 +209,13 @@
 				case 39: // right arrow
 					video.currentTime += 5;
 					break;
+				case 78: // n
+					nextVideo();
+					break;
+				case 80: // p
+					previousVideo();
+					break;
+				
 			}
 		});
 	</script>
